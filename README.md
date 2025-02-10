@@ -1,0 +1,1 @@
+# Merch_store-Avito_test_task

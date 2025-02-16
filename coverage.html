@@ -1,0 +1,1037 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>cmd: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">Merch_store-Avito_test_task/cmd/main.go (0.0%)</option>
+				
+				<option value="file1">Merch_store-Avito_test_task/internal/pkg/auth/delivery/http/handler.go (96.9%)</option>
+				
+				<option value="file2">Merch_store-Avito_test_task/internal/pkg/auth/repository/auth_repository.go (100.0%)</option>
+				
+				<option value="file3">Merch_store-Avito_test_task/internal/pkg/auth/usecase/auth_usecase.go (0.0%)</option>
+				
+				<option value="file4">Merch_store-Avito_test_task/internal/pkg/config/config.go (0.0%)</option>
+				
+				<option value="file5">Merch_store-Avito_test_task/internal/pkg/httpresponses/responses.go (0.0%)</option>
+				
+				<option value="file6">Merch_store-Avito_test_task/internal/pkg/jwt/jwt.go (0.0%)</option>
+				
+				<option value="file7">Merch_store-Avito_test_task/internal/pkg/middleware/middleware.go (0.0%)</option>
+				
+				<option value="file8">Merch_store-Avito_test_task/internal/pkg/payments/delivery/http/handler.go (52.5%)</option>
+				
+				<option value="file9">Merch_store-Avito_test_task/internal/pkg/payments/repository/payments_repository.go (71.6%)</option>
+				
+				<option value="file10">Merch_store-Avito_test_task/internal/pkg/payments/usecase/payments_usecase.go (0.0%)</option>
+				
+				<option value="file11">Merch_store-Avito_test_task/internal/pkg/service/delivery/http/handler.go (100.0%)</option>
+				
+				<option value="file12">Merch_store-Avito_test_task/internal/pkg/service/repository/service_repository.go (90.0%)</option>
+				
+				<option value="file13">Merch_store-Avito_test_task/internal/pkg/service/usecase/service_usecase.go (0.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">no coverage</span>
+				<span class="cov1">low coverage</span>
+				<span class="cov2">*</span>
+				<span class="cov3">*</span>
+				<span class="cov4">*</span>
+				<span class="cov5">*</span>
+				<span class="cov6">*</span>
+				<span class="cov7">*</span>
+				<span class="cov8">*</span>
+				<span class="cov9">*</span>
+				<span class="cov10">high coverage</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package main
+
+import (
+        authHandler "Merch_store-Avito_test_task/internal/pkg/auth/delivery/http"
+        authRepo "Merch_store-Avito_test_task/internal/pkg/auth/repository"
+        authUsecase "Merch_store-Avito_test_task/internal/pkg/auth/usecase"
+        "Merch_store-Avito_test_task/internal/pkg/config"
+        httpresponse "Merch_store-Avito_test_task/internal/pkg/httpresponses"
+        "Merch_store-Avito_test_task/internal/pkg/jwt"
+        "Merch_store-Avito_test_task/internal/pkg/middleware"
+        paymentsHandler "Merch_store-Avito_test_task/internal/pkg/payments/delivery/http"
+        paymentsRepo "Merch_store-Avito_test_task/internal/pkg/payments/repository"
+        paymentsUsecase "Merch_store-Avito_test_task/internal/pkg/payments/usecase"
+        serviceHandler "Merch_store-Avito_test_task/internal/pkg/service/delivery/http"
+        serviceRepo "Merch_store-Avito_test_task/internal/pkg/service/repository"
+        serviceUsecase "Merch_store-Avito_test_task/internal/pkg/service/usecase"
+        "context"
+        "database/sql"
+        "errors"
+        "fmt"
+        "github.com/gorilla/mux"
+        "log"
+        "log/slog"
+        "net/http"
+        _ "net/http/pprof"
+        "os"
+        "os/signal"
+        "syscall"
+        "time"
+)
+
+func main() <span class="cov0" title="0">{
+
+        cfg := config.Load()
+
+        logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+
+        jwtSecret := os.Getenv("JWT_SECRET")
+        jwtHandler := jwt.NewJTW(jwtSecret, logger)
+
+        db, err := sql.Open("postgres", fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", cfg.Database.DbHost, cfg.Database.DbPort, cfg.Database.DbUser, cfg.Database.DbPass, cfg.Database.DbName))
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatalf("failed to connect to database: %v", err)
+        }</span>
+        <span class="cov0" title="0">defer db.Close()
+        db.SetMaxOpenConns(100)                 // Maximum number of open connections
+        db.SetMaxIdleConns(50)                  // Maximum number of idle connections
+        db.SetConnMaxLifetime(10 * time.Minute) // Maximum lifetime of a connection
+        db.SetConnMaxIdleTime(10 * time.Minute)
+        log.Printf("DB_HOST: %s, DB_PORT: %d, DB_USER: %s, DB_PASS: %s, DB_NAME: %s", cfg.Database.DbHost, cfg.Database.DbPort, cfg.Database.DbUser, cfg.Database.DbPass, cfg.Database.DbName)
+        err = db.Ping()
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatalf("failed to ping database: %v", err)
+        }</span>
+
+        <span class="cov0" title="0">authRepo := authRepo.NewAuthRepositoryImpl(db)
+        authUsecase := authUsecase.NewAuthUsecase(authRepo)
+        authHandler := authHandler.NewAuthHandler(authUsecase, logger, jwtHandler)
+
+        paymentsRepo := paymentsRepo.NewAuthRepositoryImpl(db)
+        paymentsUsecase := paymentsUsecase.NewPaymentsUsecase(paymentsRepo)
+        paymentsHandler := paymentsHandler.NewPaymentsHandler(paymentsUsecase, logger)
+
+        serviceRepo := serviceRepo.NewServiceRepo(db)
+        serviceUsecase := serviceUsecase.NewServiceUsecase(serviceRepo)
+        serviceHandler := serviceHandler.NewServiceHandler(serviceUsecase, logger)
+
+        r := mux.NewRouter().PathPrefix("/api").Subrouter()
+
+        r.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) </span><span class="cov0" title="0">{
+                response := httpresponse.Response{
+                        Message: "Not found",
+                }
+                httpresponse.SendJSONResponse(r.Context(), w, response, http.StatusNotFound, logger)
+        }</span>)
+        <span class="cov0" title="0">r.HandleFunc("/healthcheck", healthcheckHandler).Methods(http.MethodGet)
+
+        r.HandleFunc("/auth", authHandler.Login).Methods(http.MethodPost)
+        r.Handle("/sendCoin", middleware.AuthMiddleware(jwtHandler, http.HandlerFunc(paymentsHandler.SendCoins), logger)).Methods(http.MethodPost)
+        r.Handle("/buy/{item}", middleware.AuthMiddleware(jwtHandler, http.HandlerFunc(paymentsHandler.BuyItem), logger)).Methods(http.MethodGet)
+        r.Handle("/info", middleware.AuthMiddleware(jwtHandler, http.HandlerFunc(serviceHandler.GetUserInfo), logger)).Methods(http.MethodGet)
+
+        httpSrv := &amp;http.Server{Handler: r, Addr: fmt.Sprintf(":%d", cfg.HttpServer.Address)}
+        go func() </span><span class="cov0" title="0">{
+                logger.Info(fmt.Sprintf("HTTP server listening on :%d", cfg.HttpServer.Address))
+                if err := httpSrv.ListenAndServe(); err != nil &amp;&amp; !errors.Is(err, http.ErrServerClosed) </span><span class="cov0" title="0">{
+                        logger.Error("failed to serve HTTP", slog.String("error", err.Error()))
+                        os.Exit(1)
+                }</span>
+        }()
+
+        <span class="cov0" title="0">stop := make(chan os.Signal, 1)
+        signal.Notify(stop, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+
+        &lt;-stop
+
+        logger.Info("Shutting down HTTP server...")
+        if err := httpSrv.Shutdown(context.Background()); err != nil </span><span class="cov0" title="0">{
+                logger.Error("HTTP server shutdown failed", slog.String("error", err.Error()))
+                os.Exit(1)
+        }</span>
+        <span class="cov0" title="0">logger.Info("HTTP server gracefully stopped")</span>
+}
+
+func healthcheckHandler(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        logger := &amp;slog.Logger{}
+
+        _, err := fmt.Fprintf(w, "STATUS: OK")
+        if err != nil </span><span class="cov0" title="0">{
+                logger.Error("Failed to write healthcheck response", slog.Any("error", err))
+                response := httpresponse.Response{
+                        Message: "Invalid request",
+                }
+                httpresponse.SendJSONResponse(r.Context(), w, response, http.StatusBadRequest, logger)
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package http
+
+import (
+        "Merch_store-Avito_test_task/internal/pkg/auth"
+        httpresponse "Merch_store-Avito_test_task/internal/pkg/httpresponses"
+        "Merch_store-Avito_test_task/internal/pkg/jwt"
+        "encoding/json"
+        "html/template"
+        "log/slog"
+        "net/http"
+)
+
+type AuthHandler struct {
+        uc     auth.AuthUsecase
+        logger *slog.Logger
+        jwt    jwt.JWTInterface
+}
+
+func NewAuthHandler(uc auth.AuthUsecase, logger *slog.Logger, jwt jwt.JWTInterface) *AuthHandler <span class="cov8" title="1">{
+        return &amp;AuthHandler{uc: uc, logger: logger, jwt: jwt}
+}</span>
+
+func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        w.Header().Set("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self';")
+        logCtx := r.Context()
+        h.logger.DebugContext(logCtx, "Handling request for log in")
+
+        var credentials struct {
+                Username string `json:"username"`
+                Password string `json:"password"`
+        }
+
+        if err := json.NewDecoder(r.Body).Decode(&amp;credentials); err != nil || credentials.Username == "" || credentials.Password == "" </span><span class="cov8" title="1">{
+                h.logger.WarnContext(logCtx, "Failed to decode credentials",
+                        slog.String("error", func() string </span><span class="cov8" title="1">{
+                                if err != nil </span><span class="cov0" title="0">{
+                                        return err.Error()
+                                }</span>
+                                <span class="cov8" title="1">return "empty username or password"</span>
+                        }()),
+                )
+                <span class="cov8" title="1">response := httpresponse.Response{
+                        Message: "Invalid request",
+                }
+                httpresponse.SendJSONResponse(logCtx, w, response, http.StatusBadRequest, h.logger)
+                return</span>
+        }
+
+        <span class="cov8" title="1">credentials.Username = template.HTMLEscapeString(credentials.Username)
+        credentials.Password = template.HTMLEscapeString(credentials.Password)
+
+        user, err := h.uc.Login(r.Context(), credentials.Username, credentials.Password)
+        if err != nil </span><span class="cov8" title="1">{
+                h.logger.ErrorContext(logCtx, "Login failed: invalid username or password")
+
+                response := httpresponse.Response{
+                        Message: "Invalid username or password",
+                }
+                httpresponse.SendJSONResponse(logCtx, w, response, http.StatusUnauthorized, h.logger)
+                return
+        }</span>
+
+        <span class="cov8" title="1">h.logger.DebugContext(logCtx, "User logged in successfully")
+
+        token, err := h.jwt.GenerateToken(user.ID, user.Username)
+        if err != nil </span><span class="cov8" title="1">{
+                h.logger.ErrorContext(logCtx, "Token generation failed", slog.String("error", err.Error()))
+                response := httpresponse.Response{
+                        Message: "Token generation failed",
+                }
+                httpresponse.SendJSONResponse(logCtx, w, response, http.StatusInternalServerError, h.logger)
+                return
+        }</span>
+        <span class="cov8" title="1">h.logger.DebugContext(logCtx, "Token generated", slog.Int("ID", int(user.ID)), slog.String("username", user.Username))
+        w.Header().Set("Access-Token", token)
+        h.logger.DebugContext(logCtx, "Login request completed successfully")
+
+        httpresponse.SendJSONResponse(logCtx, w, map[string]string{"token": token}, http.StatusOK, h.logger)</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package repository
+
+import (
+        "Merch_store-Avito_test_task/internal/models"
+        "context"
+        "database/sql"
+        "errors"
+        "github.com/lib/pq"
+)
+
+type AuthRepositoryImpl struct {
+        db *sql.DB
+}
+
+func NewAuthRepositoryImpl(db *sql.DB) *AuthRepositoryImpl <span class="cov8" title="1">{
+        return &amp;AuthRepositoryImpl{db: db}
+}</span>
+
+func (repo *AuthRepositoryImpl) CreateUser(ctx context.Context, user models.User) (uint, error) <span class="cov8" title="1">{
+        var userID uint
+        query := `INSERT INTO "user" (username, password_hash) VALUES ($1, $2) RETURNING id`
+        err := repo.db.QueryRowContext(ctx, query, user.Username, user.PasswordHash).Scan(&amp;userID)
+        if err != nil </span><span class="cov8" title="1">{
+                var pqErr *pq.Error
+                if errors.As(err, &amp;pqErr) &amp;&amp; pqErr.Code == "23505" </span><span class="cov8" title="1">{
+                        return 0, models.ErrAlreadyExists
+                }</span>
+                <span class="cov8" title="1">return 0, err</span>
+        }
+        <span class="cov8" title="1">return userID, nil</span>
+}
+
+func (repo *AuthRepositoryImpl) GetUser(ctx context.Context, username string) (models.User, error) <span class="cov8" title="1">{
+        query := `SELECT id, username, password_hash FROM "user" WHERE username = $1`
+        row := repo.db.QueryRowContext(ctx, query, username)
+        var user models.User
+        err := row.Scan(&amp;user.ID, &amp;user.Username, &amp;user.PasswordHash)
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, sql.ErrNoRows) </span><span class="cov8" title="1">{
+                        return models.User{}, models.ErrNotFound
+                }</span>
+                <span class="cov8" title="1">return models.User{}, err</span>
+        }
+        <span class="cov8" title="1">return user, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package usecase
+
+import (
+        "Merch_store-Avito_test_task/internal/models"
+        "Merch_store-Avito_test_task/internal/pkg/auth"
+        "context"
+        "errors"
+        "fmt"
+        "golang.org/x/crypto/bcrypt"
+        "log"
+)
+
+type AuthUsecaseImpl struct {
+        repo auth.AuthRepository
+}
+
+func NewAuthUsecase(repo auth.AuthRepository) *AuthUsecaseImpl <span class="cov0" title="0">{
+        return &amp;AuthUsecaseImpl{repo}
+}</span>
+
+func (uc *AuthUsecaseImpl) Login(ctx context.Context, username, password string) (models.User, error) <span class="cov0" title="0">{
+        user, err := uc.repo.GetUser(ctx, username)
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, models.ErrNotFound) </span><span class="cov0" title="0">{
+                        hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+                        if err != nil </span><span class="cov0" title="0">{
+                                return models.User{}, fmt.Errorf("error hashing password: %w", err)
+                        }</span>
+
+                        <span class="cov0" title="0">user := models.User{
+                                Username:     username,
+                                PasswordHash: string(hashedPassword),
+                        }
+
+                        userID, err := uc.repo.CreateUser(ctx, user)
+                        if err != nil </span><span class="cov0" title="0">{
+                                return models.User{}, fmt.Errorf("error creating user: %w", err)
+                        }</span>
+
+                        <span class="cov0" title="0">user.ID = userID
+                        return user, nil</span>
+                }
+                <span class="cov0" title="0">return models.User{}, err</span>
+        }
+
+        <span class="cov0" title="0">err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password))
+        if err != nil </span><span class="cov0" title="0">{
+                log.Printf("Password mismatch: %v\n", err)
+                return models.User{}, models.ErrMismatch
+        }</span>
+
+        <span class="cov0" title="0">log.Printf("password match\n")
+        return user, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package config
+
+import (
+        "github.com/ilyakaznacheev/cleanenv"
+        "log"
+        "os"
+        "time"
+)
+
+type Config struct {
+        ConfigPath string `env:"CONFIG_PATH" env-default:"config/config.yaml"`
+        Database   Database
+        HttpServer HttpServer `yaml:"HttpServer"`
+}
+
+type Database struct {
+        DbHost string `env:"DB_HOST" env-required:"true"`
+        DbPort int    `env:"DB_PORT" env-required:"true"`
+        DbUser string `env:"DB_USER" env-required:"true"`
+        DbPass string `env:"DB_PASS" env-required:"true"`
+        DbName string `env:"DB_NAME" env-required:"true"`
+}
+
+type HttpServer struct {
+        Address      int           `yaml:"Address" env-default:"8080"`
+        IdleTimeout  time.Duration `yaml:"idle_timeout" yaml-default:"60s"`
+        ReadTimeout  time.Duration `yaml:"read_timeout" yaml-default:"10s"`
+        WriteTimeout time.Duration `yaml:"write_timeout" yaml-default:"10s"`
+}
+
+func Load() *Config <span class="cov0" title="0">{
+        var cfg Config
+
+        if err := cleanenv.ReadEnv(&amp;cfg); err != nil </span><span class="cov0" title="0">{
+                log.Printf("cannot read .env file: %s\n (fix: you need to put .env file in main dir)", err)
+                os.Exit(1)
+        }</span>
+        <span class="cov0" title="0">return &amp;cfg</span>
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package httpresponses
+
+import (
+        "context"
+        "encoding/json"
+        "log/slog"
+        "net/http"
+)
+
+type Response struct {
+        Message string `json:"message"`
+}
+
+func SendJSONResponse(logCtx context.Context, w http.ResponseWriter, data interface{}, status int, logger *slog.Logger) <span class="cov0" title="0">{
+        w.WriteHeader(status)
+
+        w.Header().Set("Content-Type", "application/json")
+        if err := json.NewEncoder(w).Encode(data); err != nil </span><span class="cov0" title="0">{
+                logger.ErrorContext(logCtx, "Failed to encode response to JSON", slog.Any("error", err.Error()))
+                http.Error(w, "Failed to convert to json", http.StatusInternalServerError)
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package jwt
+
+import (
+        "fmt"
+        "github.com/dgrijalva/jwt-go"
+        "log/slog"
+        "time"
+)
+
+type JWT struct {
+        secret []byte
+        logger *slog.Logger
+}
+
+func NewJTW(secret string, logger *slog.Logger) *JWT <span class="cov0" title="0">{
+        return &amp;JWT{[]byte(secret), logger}
+}</span>
+
+func (j *JWT) GenerateToken(userID uint, username string) (string, error) <span class="cov0" title="0">{
+        claims := jwt.MapClaims{
+                "userID":   userID,
+                "username": username,
+                "exp":      time.Now().Add(time.Minute * 15).Unix(),
+        }
+        j.logger.Debug("checking claims", "claims:", claims)
+        token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+        tokenString, err := token.SignedString(j.secret)
+        if err != nil </span><span class="cov0" title="0">{
+                j.logger.Error("error signing token", "err", err)
+                return "", err
+        }</span>
+        <span class="cov0" title="0">return tokenString, nil</span>
+}
+
+func (j *JWT) ParseToken(tokenString string) (jwt.MapClaims, error) <span class="cov0" title="0">{
+        parsedToken, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) </span><span class="cov0" title="0">{
+                if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok </span><span class="cov0" title="0">{
+                        return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+                }</span>
+                <span class="cov0" title="0">return j.secret, nil</span>
+        })
+
+        <span class="cov0" title="0">if err != nil || parsedToken == nil </span><span class="cov0" title="0">{
+                j.logger.Error("Error parsing token", slog.String("error", err.Error()))
+                return nil, fmt.Errorf("invalid token")
+        }</span>
+
+        <span class="cov0" title="0">if claims, ok := parsedToken.Claims.(jwt.MapClaims); ok &amp;&amp; parsedToken.Valid </span><span class="cov0" title="0">{
+                j.logger.Debug("from parsed token", "claims", claims)
+                return claims, nil
+        }</span>
+        <span class="cov0" title="0">return nil, err</span>
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package middleware
+
+import (
+        "Merch_store-Avito_test_task/internal/pkg/httpresponses"
+        "Merch_store-Avito_test_task/internal/pkg/jwt"
+        "context"
+        "log/slog"
+        "net/http"
+)
+
+type ContextKey string
+
+const (
+        IdKey       ContextKey = "userID"
+        UsernameKey ContextKey = "username"
+)
+
+func AuthMiddleware(jwtService jwt.JWTInterface, next http.Handler, logger *slog.Logger) http.Handler <span class="cov0" title="0">{
+        return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) </span><span class="cov0" title="0">{
+                token := r.Header.Get("Access-Token")
+                if token == "" </span><span class="cov0" title="0">{
+                        response := httpresponses.Response{
+                                Message: "token is missing",
+                        }
+                        logger.Error("token is missing")
+                        httpresponses.SendJSONResponse(r.Context(), w, response, http.StatusUnauthorized, logger)
+                        return
+                }</span>
+                <span class="cov0" title="0">claims, err := jwtService.ParseToken(token)
+                if err != nil || claims == nil </span><span class="cov0" title="0">{
+                        response := httpresponses.Response{
+                                Message: "token is invalid",
+                        }
+                        logger.Error("token is invalid", slog.Any("error", err.Error()))
+                        httpresponses.SendJSONResponse(r.Context(), w, response, http.StatusUnauthorized, logger)
+                        return
+                }</span>
+                <span class="cov0" title="0">userIDFloat, ok1 := claims["userID"].(float64)
+                username, ok2 := claims["username"].(string)
+                if !ok1 || !ok2 </span><span class="cov0" title="0">{
+                        logger.Error("Invalid token claims")
+                        response := httpresponses.Response{
+                                Message: "Invalid token claims",
+                        }
+                        httpresponses.SendJSONResponse(r.Context(), w, response, http.StatusUnauthorized, logger)
+                        return
+                }</span>
+                <span class="cov0" title="0">userID := uint(userIDFloat)
+
+                logger.Debug("Token parsed", slog.Int("userID", int(userID)), slog.String("username", username))
+                ctx := context.WithValue(r.Context(), IdKey, userID)
+                ctx = context.WithValue(ctx, UsernameKey, username)
+
+                r = r.WithContext(ctx)
+                next.ServeHTTP(w, r)</span>
+        })
+}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package http
+
+import (
+        "Merch_store-Avito_test_task/internal/models"
+        "Merch_store-Avito_test_task/internal/pkg/httpresponses"
+        "Merch_store-Avito_test_task/internal/pkg/middleware"
+        "Merch_store-Avito_test_task/internal/pkg/payments"
+        "encoding/json"
+        "errors"
+        "github.com/gorilla/mux"
+        "log/slog"
+        "net/http"
+        "strconv"
+)
+
+type PaymentsHandler struct {
+        uc     payments.PaymentsUsecase
+        logger *slog.Logger
+}
+
+func NewPaymentsHandler(uc payments.PaymentsUsecase, logger *slog.Logger) *PaymentsHandler <span class="cov8" title="1">{
+        return &amp;PaymentsHandler{uc: uc, logger: logger}
+}</span>
+
+func (h *PaymentsHandler) SendCoins(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        ctx := r.Context()
+        _, ok := ctx.Value(middleware.IdKey).(uint)
+        if !ok </span><span class="cov0" title="0">{
+                h.logger.ErrorContext(ctx, "failed to retrieve user id from context")
+                response := httpresponses.Response{
+                        Message: "User is not authorized",
+                }
+                httpresponses.SendJSONResponse(ctx, w, response, http.StatusUnauthorized, h.logger)
+                return
+        }</span>
+        <span class="cov8" title="1">type Data struct {
+                ToUser string `json:"toUser"`
+                Amount uint   `json:"amount"`
+        }
+        var data Data
+        err := json.NewDecoder(r.Body).Decode(&amp;data)
+        if err != nil </span><span class="cov0" title="0">{
+                h.logger.ErrorContext(ctx, "failed to decode request body:", slog.String("err", err.Error()))
+                response := httpresponses.Response{
+                        Message: "failed to decode request body",
+                }
+                httpresponses.SendJSONResponse(ctx, w, response, http.StatusBadRequest, h.logger)
+                return
+        }</span>
+        <span class="cov8" title="1">err = h.uc.SendCoins(ctx, data.ToUser, data.Amount)
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, models.ErrNotEnough) </span><span class="cov8" title="1">{
+                        h.logger.ErrorContext(ctx, "not enough money:", slog.String("err", err.Error()))
+                        response := httpresponses.Response{
+                                Message: "not enough money",
+                        }
+                        httpresponses.SendJSONResponse(ctx, w, response, http.StatusForbidden, h.logger)
+                        return
+                }</span> else<span class="cov0" title="0"> if errors.Is(err, models.ErrNotFound) </span><span class="cov0" title="0">{
+                        h.logger.ErrorContext(ctx, "not found:", slog.String("err", err.Error()))
+                        response := httpresponses.Response{
+                                Message: "not found",
+                        }
+                        httpresponses.SendJSONResponse(ctx, w, response, http.StatusNotFound, h.logger)
+                        return
+                }</span>
+                <span class="cov0" title="0">h.logger.ErrorContext(ctx, "failed to send coins:", slog.String("err", err.Error()))
+                response := httpresponses.Response{
+                        Message: "failed to send coins",
+                }
+                httpresponses.SendJSONResponse(ctx, w, response, http.StatusInternalServerError, h.logger)
+                return</span>
+        }
+        <span class="cov8" title="1">h.logger.DebugContext(ctx, "successfully sent coins to user: %v", slog.String("toUser", data.ToUser))
+        httpresponses.SendJSONResponse(ctx, w, nil, http.StatusOK, h.logger)</span>
+}
+
+func (h *PaymentsHandler) BuyItem(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        ctx := r.Context()
+        _, ok := ctx.Value(middleware.IdKey).(uint)
+        if !ok </span><span class="cov0" title="0">{
+                h.logger.ErrorContext(ctx, "failed to retrieve user id from context")
+                response := httpresponses.Response{
+                        Message: "User is not authorized",
+                }
+                httpresponses.SendJSONResponse(ctx, w, response, http.StatusUnauthorized, h.logger)
+                return
+        }</span>
+        <span class="cov8" title="1">vars := mux.Vars(r)
+        itemId, err := strconv.Atoi(vars["item"])
+        if err != nil </span><span class="cov0" title="0">{
+                h.logger.ErrorContext(ctx, "failed to parse item id:", slog.String("err", err.Error()))
+                response := httpresponses.Response{
+                        Message: "failed to parse item id",
+                }
+                httpresponses.SendJSONResponse(ctx, w, response, http.StatusBadRequest, h.logger)
+                return
+        }</span>
+        <span class="cov8" title="1">err = h.uc.BuyItem(ctx, uint(itemId))
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, models.ErrNotEnough) </span><span class="cov8" title="1">{
+                        h.logger.ErrorContext(ctx, "not enough money:", slog.String("err", err.Error()))
+                        response := httpresponses.Response{
+                                Message: "not enough money",
+                        }
+                        httpresponses.SendJSONResponse(ctx, w, response, http.StatusForbidden, h.logger)
+                        return
+                }</span>
+                <span class="cov0" title="0">h.logger.ErrorContext(ctx, "failed to buy item:", slog.String("err", err.Error()))
+                response := httpresponses.Response{
+                        Message: "failed to buy item",
+                }
+                httpresponses.SendJSONResponse(ctx, w, response, http.StatusInternalServerError, h.logger)
+                return</span>
+        }
+        <span class="cov8" title="1">h.logger.DebugContext(ctx, "successfully buy item to user: %v", slog.Int("itemId", itemId))
+        httpresponses.SendJSONResponse(ctx, w, nil, http.StatusOK, h.logger)</span>
+}
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package repository
+
+import (
+        "Merch_store-Avito_test_task/internal/models"
+        "Merch_store-Avito_test_task/internal/pkg/middleware"
+        "context"
+        "database/sql"
+        "fmt"
+        "github.com/lib/pq"
+)
+
+type PaymentsRepositoryImpl struct {
+        db *sql.DB
+}
+
+func NewAuthRepositoryImpl(db *sql.DB) *PaymentsRepositoryImpl <span class="cov0" title="0">{
+        return &amp;PaymentsRepositoryImpl{db}
+}</span>
+
+func (r *PaymentsRepositoryImpl) Transfer(ctx context.Context, toUser string, amount uint) error <span class="cov8" title="1">{
+        tx, err := r.db.BeginTx(ctx, nil)
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("failed start transaction: %w", err)
+        }</span>
+        <span class="cov8" title="1">defer tx.Rollback()
+
+        userID := ctx.Value(middleware.IdKey).(uint)
+
+        query := `UPDATE "user" SET coins = coins - $1 WHERE id = $2`
+        res, err := tx.ExecContext(ctx, query, amount, userID)
+        if err != nil </span><span class="cov8" title="1">{
+                if pqErr, ok := err.(*pq.Error); ok </span><span class="cov0" title="0">{
+                        if pqErr.Code == "23514" </span><span class="cov0" title="0">{
+                                return fmt.Errorf("not enough coins to send: %w", models.ErrNotEnough)
+                        }</span>
+                }
+                <span class="cov8" title="1">return fmt.Errorf("updating balance failed: %v", err)</span>
+        }
+        <span class="cov8" title="1">rowsAffected, err := res.RowsAffected()
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("getting rows affected failed: %v", err)
+        }</span>
+        <span class="cov8" title="1">if rowsAffected == 0 </span><span class="cov0" title="0">{
+                return fmt.Errorf("receiver not found: %w", models.ErrNotFound)
+        }</span>
+
+        <span class="cov8" title="1">query = `UPDATE "user" SET coins = coins + $1 WHERE username = $2`
+        res, err = tx.ExecContext(ctx, query, amount, toUser)
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("updating balance failed: %v", err)
+        }</span>
+        <span class="cov8" title="1">rowsAffected, err = res.RowsAffected()
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("getting rows affected failed: %v", err)
+        }</span>
+        <span class="cov8" title="1">if rowsAffected == 0 </span><span class="cov8" title="1">{
+                return fmt.Errorf("receiver not found: %w", models.ErrNotFound)
+        }</span>
+
+        <span class="cov8" title="1">query = `INSERT INTO "transaction" (amount, from_user_id, to_user_id) VALUES ($1, $2, (SELECT id FROM "user" WHERE username = $3))`
+        res, err = tx.ExecContext(ctx, query, amount, userID, toUser)
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("inserting transaction failed: %v", err)
+        }</span>
+        <span class="cov8" title="1">rowsAffected, err = res.RowsAffected()
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("getting rows affected failed: %v", err)
+        }</span>
+        <span class="cov8" title="1">if rowsAffected == 0 </span><span class="cov0" title="0">{
+                return fmt.Errorf("receiver not found: %w", models.ErrNotFound)
+        }</span>
+
+        <span class="cov8" title="1">if err = tx.Commit(); err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("committing transaction failed: %v", err)
+        }</span>
+        <span class="cov8" title="1">return nil</span>
+}
+
+func (r *PaymentsRepositoryImpl) BuyItem(ctx context.Context, itemID uint) error <span class="cov8" title="1">{
+        tx, err := r.db.BeginTx(ctx, nil)
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("failed start transaction: %w", err)
+        }</span>
+        <span class="cov8" title="1">defer tx.Rollback()
+        userID := ctx.Value(middleware.IdKey).(uint)
+        var amount uint
+        query := `SELECT price FROM "product" WHERE id = $1`
+        row := tx.QueryRowContext(ctx, query, itemID)
+        err = row.Scan(&amp;amount)
+        if err != nil </span><span class="cov8" title="1">{
+                return fmt.Errorf("getting product failed: %v", err)
+        }</span>
+        <span class="cov8" title="1">query = `UPDATE "user" SET coins = coins - $1 WHERE id = $2`
+        res, err := tx.ExecContext(ctx, query, amount, userID)
+        if err != nil </span><span class="cov8" title="1">{
+                if pqErr, ok := err.(*pq.Error); ok </span><span class="cov0" title="0">{
+                        if pqErr.Code == "23514" </span><span class="cov0" title="0">{
+                                return fmt.Errorf("not enough coins to buy: %w", models.ErrNotEnough)
+                        }</span>
+                }
+                <span class="cov8" title="1">return fmt.Errorf("updating balance failed: %v", err)</span>
+        }
+        <span class="cov8" title="1">rowsAffected, err := res.RowsAffected()
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("getting rows affected failed: %v", err)
+        }</span>
+        <span class="cov8" title="1">if rowsAffected == 0 </span><span class="cov0" title="0">{
+                return fmt.Errorf("receiver not found: %w", models.ErrNotFound)
+        }</span>
+        <span class="cov8" title="1">query = `INSERT INTO "purchase" (user_id, product_id) VALUES ($1, $2)`
+        res, err = tx.ExecContext(ctx, query, userID, itemID)
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("inserting purchase failed: %v", err)
+        }</span>
+        <span class="cov8" title="1">rowsAffected, err = res.RowsAffected()
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("getting rows affected failed: %v", err)
+        }</span>
+        <span class="cov8" title="1">if rowsAffected == 0 </span><span class="cov0" title="0">{
+                return fmt.Errorf("receiver not found: %w", models.ErrNotFound)
+        }</span>
+        <span class="cov8" title="1">if err = tx.Commit(); err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("committing transaction failed: %v", err)
+        }</span>
+        <span class="cov8" title="1">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package usecase
+
+import (
+        "Merch_store-Avito_test_task/internal/pkg/payments"
+        "context"
+)
+
+type PaymentsUsecaseImpl struct {
+        repo payments.PaymentsRepository
+}
+
+func NewPaymentsUsecase(repo payments.PaymentsRepository) *PaymentsUsecaseImpl <span class="cov0" title="0">{
+        return &amp;PaymentsUsecaseImpl{repo}
+}</span>
+
+func (r *PaymentsUsecaseImpl) SendCoins(ctx context.Context, toUser string, amount uint) error <span class="cov0" title="0">{
+        return r.repo.Transfer(ctx, toUser, amount)
+}</span>
+
+func (r *PaymentsUsecaseImpl) BuyItem(ctx context.Context, itemId uint) error <span class="cov0" title="0">{
+        return r.repo.BuyItem(ctx, itemId)
+}</span>
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package http
+
+import (
+        "Merch_store-Avito_test_task/internal/pkg/httpresponses"
+        "Merch_store-Avito_test_task/internal/pkg/middleware"
+        "Merch_store-Avito_test_task/internal/pkg/service"
+        "log/slog"
+        "net/http"
+)
+
+type ServiceHandler struct {
+        uc     service.ServiceUsecase
+        logger *slog.Logger
+}
+
+func NewServiceHandler(uc service.ServiceUsecase, logger *slog.Logger) *ServiceHandler <span class="cov8" title="1">{
+        return &amp;ServiceHandler{uc: uc, logger: logger}
+}</span>
+
+func (h *ServiceHandler) GetUserInfo(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        ctx := r.Context()
+        _, ok := ctx.Value(middleware.IdKey).(uint)
+        if !ok </span><span class="cov8" title="1">{
+                h.logger.ErrorContext(ctx, "failed to retrieve user id from context")
+                response := httpresponses.Response{
+                        Message: "User is not authorized",
+                }
+                httpresponses.SendJSONResponse(ctx, w, response, http.StatusUnauthorized, h.logger)
+                return
+        }</span>
+        <span class="cov8" title="1">info, err := h.uc.GetUserInfo(ctx)
+        if err != nil </span><span class="cov8" title="1">{
+                h.logger.ErrorContext(ctx, "failed to retrieve user info from context")
+                response := httpresponses.Response{
+                        Message: "Failed to get user info",
+                }
+                httpresponses.SendJSONResponse(ctx, w, response, http.StatusInternalServerError, h.logger)
+                return
+        }</span>
+        <span class="cov8" title="1">httpresponses.SendJSONResponse(ctx, w, info, http.StatusOK, h.logger)</span>
+}
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package repository
+
+import (
+        "Merch_store-Avito_test_task/internal/models"
+        "context"
+        "database/sql"
+        "fmt"
+)
+
+type ServiceRepoImpl struct {
+        db *sql.DB
+}
+
+func NewServiceRepo(db *sql.DB) *ServiceRepoImpl <span class="cov8" title="1">{
+        return &amp;ServiceRepoImpl{db}
+}</span>
+
+func (r *ServiceRepoImpl) GetUserInfo(ctx context.Context, userID uint) (models.UserData, error) <span class="cov8" title="1">{
+        var data models.UserData
+        query := `SELECT coins from "user" WHERE id = $1`
+        row := r.db.QueryRowContext(ctx, query, userID)
+        err := row.Scan(&amp;data.Coins)
+        if err != nil </span><span class="cov8" title="1">{
+                return models.UserData{}, fmt.Errorf("failed to get balance: %w", err)
+        }</span>
+
+        <span class="cov8" title="1">query = `SELECT p.name, COUNT(p.id)
+                FROM "purchase" pu
+                JOIN "product" p ON pu.product_id = p.id
+                WHERE pu.user_id = $1
+                GROUP BY p.name`
+        rows, err := r.db.QueryContext(ctx, query, userID)
+        if err != nil </span><span class="cov8" title="1">{
+                return models.UserData{}, fmt.Errorf("failed to get purchases: %w", err)
+        }</span>
+        <span class="cov8" title="1">defer rows.Close()
+        for rows.Next() </span><span class="cov8" title="1">{
+                var inventory models.Inventory
+                if err = rows.Scan(&amp;inventory.Type, &amp;inventory.Quantity); err != nil </span><span class="cov0" title="0">{
+                        return models.UserData{}, fmt.Errorf("failed to scan inventory: %w", err)
+                }</span>
+                <span class="cov8" title="1">data.Inventory = append(data.Inventory, inventory)</span>
+        }
+
+        <span class="cov8" title="1">query = `SELECT u.username, t.amount
+                FROM transaction t
+                JOIN "user" u ON t.from_user_id = u.id
+                WHERE t.to_user_id = $1 ORDER BY t.created_at DESC`
+        rows, err = r.db.QueryContext(ctx, query, userID)
+        if err != nil </span><span class="cov8" title="1">{
+                return models.UserData{}, fmt.Errorf("failed to get transactions: %w", err)
+        }</span>
+        <span class="cov8" title="1">defer rows.Close()
+        for rows.Next() </span><span class="cov8" title="1">{
+                var transaction models.Transaction
+                err = rows.Scan(&amp;transaction.FromUser, &amp;transaction.Amount)
+                if err != nil </span><span class="cov0" title="0">{
+                        return models.UserData{}, fmt.Errorf("failed to scan transactions: %w", err)
+                }</span>
+                <span class="cov8" title="1">data.CoinHistory.Received = append(data.CoinHistory.Received, transaction)</span>
+        }
+        <span class="cov8" title="1">query = `SELECT u.username, t.amount
+                FROM transaction t
+                JOIN "user" u ON t.to_user_id = u.id
+                WHERE t.from_user_id = $1 ORDER BY t.created_at DESC`
+        rows, err = r.db.QueryContext(ctx, query, userID)
+        if err != nil </span><span class="cov0" title="0">{
+                return models.UserData{}, fmt.Errorf("failed to get transactions: %w", err)
+        }</span>
+        <span class="cov8" title="1">defer rows.Close()
+        for rows.Next() </span><span class="cov8" title="1">{
+                var transaction models.Transaction
+                err = rows.Scan(&amp;transaction.ToUser, &amp;transaction.Amount)
+                if err != nil </span><span class="cov0" title="0">{
+                        return models.UserData{}, fmt.Errorf("failed to scan transactions: %w", err)
+                }</span>
+                <span class="cov8" title="1">data.CoinHistory.Sent = append(data.CoinHistory.Sent, transaction)</span>
+        }
+        <span class="cov8" title="1">return data, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package service
+
+import (
+        "Merch_store-Avito_test_task/internal/models"
+        "Merch_store-Avito_test_task/internal/pkg/middleware"
+        "Merch_store-Avito_test_task/internal/pkg/service"
+        "context"
+)
+
+type ServiceUsecaseImpl struct {
+        repo service.ServiceRepository
+}
+
+func NewServiceUsecase(repo service.ServiceRepository) *ServiceUsecaseImpl <span class="cov0" title="0">{
+        return &amp;ServiceUsecaseImpl{repo}
+}</span>
+
+func (u *ServiceUsecaseImpl) GetUserInfo(ctx context.Context) (models.UserData, error) <span class="cov0" title="0">{
+        userID := ctx.Value(middleware.IdKey).(uint)
+        return u.repo.GetUserInfo(ctx, userID)
+}</span>
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

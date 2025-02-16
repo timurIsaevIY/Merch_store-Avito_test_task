@@ -1,0 +1,30 @@
+services:
+  shopdb:
+    container_name: postgres
+    image: postgres:15
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    volumes:
+      - ./db/migrations:/docker-entrypoint-initdb.d
+      - ./data:/var/lib/postgresql/data
+      - ./db/postgresql.conf:/etc/postgresql/postgresql.conf
+    restart: unless-stopped
+    ports:
+      - ${DB_PORT}:5432
+
+  main:
+    container_name: main-service
+    build:
+      context: .
+      dockerfile: ./cmd/main.Dockerfile
+    env_file:
+      - .env
+    ports:
+      - 8080:8080
+      - 6060:6060
+    depends_on:
+      - shopdb
+    restart: unless-stopped
+
